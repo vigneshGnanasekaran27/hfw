@@ -1,21 +1,27 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: localhost
-  username: vigneshg
-  password: vigneshg
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
   database: backend_development
+  username: vigneshg
+  password: vigneshg
+  host: localhost
 
 test:
   <<: *default
   database: backend_test
+  username: vigneshg
+  password: vigneshg
+  host: localhost
 
 production:
-  <<: *default
-  database: backend_production
-  username: backend
-  password: <%= ENV["DATABASE_URL"] %>
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+  cable:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
