@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/apiBase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,13 +11,12 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    const res = await fetch("http://localhost:3000/api/v1/login", {
+    const res = await fetch(`${API_BASE}/api/v1/login`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-
     if (res.ok) {
       router.push("/profile");
     } else {

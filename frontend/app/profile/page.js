@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/apiBase";
 
 export default function Profile() {
   const router = useRouter();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/me", {
+    fetch(`${API_BASE}/api/v1/me`, {
       credentials: "include",
     })
       .then(async (res) => {
