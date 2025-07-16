@@ -37,13 +37,13 @@ class Api::V1::AuthController < ApplicationController
     response.set_cookie(JWTSessions.access_cookie,
                         value: tokens[:access],
                         httponly: true,
-                        same_site: :lax,
+                        same_site: :none,
                         secure: Rails.env.production?)
 
     response.set_cookie(JWTSessions.refresh_cookie,
                         value: tokens[:refresh],
                         httponly: true,
-                        same_site: :lax,
+                        same_site: :none,
                         secure: Rails.env.production?)
   end
 end
