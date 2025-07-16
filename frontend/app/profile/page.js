@@ -13,12 +13,32 @@ export default function Profile() {
       credentials: "include",
     })
       .then(async (res) => {
-        if (!res.ok) {
+        if (res.status === 401) {
+          // Try refreshing the token
+          const refreshRes = await fetch(`${API_BASE}/api/v1/refresh`, {
+            method: "POST",
+            credentials: "include",
+          });
+          if (refreshRes.ok) {
+            // Retry the original request
+            const retryRes = await fetch(`${API_BASE}/api/v1/me`, {
+              credentials: "include",
+            });
+            if (retryRes.ok) {
+              const data = await retryRes.json();
+              setUser(data.user);
+            } else {
+              router.push("/login");
+            }
+          } else {
+            router.push("/login");
+          }
+        } else if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        } else {
           router.push("/login");
-          return;
         }
-        const data = await res.json();
-        setUser(data.user);
       })
       .catch(() => {
         router.push("/login");

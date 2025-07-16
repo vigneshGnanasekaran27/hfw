@@ -18,10 +18,27 @@ export default function LoginPage() {
       body: JSON.stringify({ email, password }),
     });
     if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem("csrf_token", data.csrf); // Store CSRF token
       router.push("/profile");
     } else {
       const data = await res.json();
       setError(data?.error || "Login failed");
+    }
+  };
+
+  const refresh = async () => {
+    const csrfToken = localStorage.getItem("csrf_token");
+    const res = await fetch(`${API_BASE}/api/v1/refresh`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "X-CSRF-Token": csrfToken },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem("csrf_token", data.csrf); // Update CSRF token
+    } else {
+      router.push("/login");
     }
   };
 
