@@ -10,7 +10,8 @@ class Api::V1::RefreshByAccessController < ApplicationController
     response.set_cookie(JWTSessions.access_cookie,
                         value: tokens[:access],
                         httponly: true,
-                        secure: Rails.env.production?)
+                        same_site: Rails.env.production? ? :none : :lax,
+                        secure: true)
 
     render json: { csrf: tokens[:csrf] }
   end

@@ -15,12 +15,14 @@ class Api::V1::AuthController < ApplicationController
       response.set_cookie(JWTSessions.access_cookie,
                           value: tokens[:access],
                           httponly: true,
-                          secure: Rails.env.production?)
+                          same_site: Rails.env.production? ? :none : :lax,
+                          secure: true)
 
       response.set_cookie(JWTSessions.refresh_cookie,
                           value: tokens[:refresh],
                           httponly: true,
-                          secure: Rails.env.production?)
+                          same_site: Rails.env.production? ? :none : :lax,
+                          secure: true)
 
       render json: { csrf: tokens[:csrf], user_id: user.id }
     else
