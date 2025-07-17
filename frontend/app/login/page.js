@@ -17,28 +17,15 @@ export default function LoginPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (res.ok) {
       const data = await res.json();
-      localStorage.setItem("csrf_token", data.csrf); // Store CSRF token
+      localStorage.setItem("csrf_token", data.csrf);
+      localStorage.setItem("user_id", data.user_id); // ✅ Store for `/users/:id` if needed
       router.push("/profile");
     } else {
       const data = await res.json();
-      setError(data?.error || "Login failed");
-    }
-  };
-
-  const refresh = async () => {
-    const csrfToken = localStorage.getItem("csrf_token");
-    const res = await fetch(`${API_BASE}/api/v1/refresh`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "X-CSRF-Token": csrfToken },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem("csrf_token", data.csrf); // Update CSRF token
-    } else {
-      router.push("/login");
+      setError(data.error || "Login failed");
     }
   };
 
@@ -52,8 +39,8 @@ export default function LoginPage() {
       />
       <input
         placeholder="password"
-        value={password}
         type="password"
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>

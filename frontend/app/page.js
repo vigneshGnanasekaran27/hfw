@@ -9,16 +9,18 @@ export default function Home() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/v1/me`, {
-          credentials: "include",
-        });
-        if (res.ok) {
-          router.push("/profile"); // ✅ authenticated
-        } else {
-          router.push("/login"); // ❌ not authenticated
-        }
-      } catch (err) {
+      const csrfToken = localStorage.getItem("csrf_token");
+
+      const res = await fetch(`${API_BASE}/api/v1/me`, {
+        credentials: "include",
+        headers: {
+          "X-CSRF-Token": csrfToken ?? "",
+        },
+      });
+
+      if (res.ok) {
+        router.push("/profile");
+      } else {
         router.push("/login");
       }
     };
