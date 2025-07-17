@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins Rails.env.production? ? 'https://hfw-bevd-vigneshgnanasekaran27s-projects.vercel.app' : 'http://localhost:3001'
+    origins Rails.env.production? ? 'https://hfw-bevd-pvg7l8c2u-vigneshgnanasekaran27s-projects.vercel.app' : 'http://localhost:3001'
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
